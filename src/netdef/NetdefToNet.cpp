@@ -166,7 +166,9 @@ STATIC bool NetdefToNet::parseSubstring(WeightsInitializer *weightsInitializer, 
         int poolingSize = atoi(splitPoolDef[1]);
         net->addLayer(PoolingMaker::instance()->poolingSize(poolingSize));
     } else if(baseLayerDef.find("drop") != string::npos) {
-        net->addLayer(DropoutMaker::instance()->dropRatio(0.5f));
+        vector<string> fullDef = split(baseLayerDef, "drop");
+        auto dropRate = atoi(fullDef[0]) / 100.0f;
+        net->addLayer(DropoutMaker::instance()->dropRatio(dropRate));
     } else if(baseLayerDef.find("relu") != string::npos) {
         net->addLayer(ActivationMaker::instance()->relu());
     } else if(baseLayerDef.find("elu") != string::npos) {
